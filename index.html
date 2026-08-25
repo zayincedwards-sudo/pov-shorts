@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pov-shorts</title>
+<link rel="stylesheet" href="_style.css">
+</head>
+<body>
+<main>
+  <h1>pov-shorts</h1>
+  <p class="updated">A personal tool for publishing short-form video to its operator's own YouTube channels.</p>
+
+  <p>pov-shorts is a private automation tool. It assembles short vertical videos and
+  uploads them to YouTube channels owned by the person running it. It is not a product,
+  not a service, and has no users other than its operator.</p>
+
+  <h2>What it does</h2>
+  <ul>
+    <li>Searches publicly available YouTube videos for candidate clips.</li>
+    <li>Selects a short moment from a candidate and writes a caption for it.</li>
+    <li>Renders a vertical (1080&times;1920) video with the caption shown above the clip.</li>
+    <li>Uploads finished videos to the operator's own YouTube channels.</li>
+    <li>Reads public view counts for the operator's own uploads to inform later captions.</li>
+  </ul>
+
+  <h2>Why it asks for YouTube access</h2>
+  <p>Uploading a video to a YouTube channel requires that channel's own authorisation.
+  The YouTube Data API has no parameter for choosing a destination channel &mdash; an
+  upload always goes to the channel whose credentials were used. The tool therefore asks
+  the operator to sign in once per channel, and requests only:</p>
+  <ul>
+    <li><code>youtube.upload</code> &mdash; to publish a video to the signed-in channel.</li>
+    <li><code>youtube.force-ssl</code> &mdash; to confirm which channel a sign-in belongs to,
+    so a video cannot be uploaded to the wrong one by mistake.</li>
+  </ul>
+  <p>It does not request analytics access, and cannot read watch time, retention,
+  demographics, or traffic sources.</p>
+
+  <h2>Contact</h2>
+  <p>zayincedwards@gmail.com</p>
+
+  <nav>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="terms.html">Terms of service</a>
+  </nav>
+</main>
+</body>
+</html>
