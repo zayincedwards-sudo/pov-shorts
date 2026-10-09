@@ -1,0 +1,55 @@
+WINNING VIDEO REPLICATOR - DECISIONS
+====================================
+
+The user's answers of 6 October 2026 to the 35 intake questions (QUESTIONS.txt, now
+retired; its text is in the git history). These are what the skill is built to.
+
+SCOPE
+- Build the skill; do not run it on any channel yet. (Q1)
+- The Zayin / Astro Ranked channel-id overlap: do not worry about it. (Q2)
+- Rules are per channel. Pooling across channels only for traits that do not depend on the
+  format, and those rows are labelled. (Q3)
+- The skill runs on ANY channel the user owns, including the Shorts and clipping channels.
+  Shorts and long-form are measured and ranked separately. (Q4)
+- The reference channels' public most-replayed heatmaps are pulled for shape comparison. (Q5)
+
+ACCESS
+- Reuse the existing Google OAuth client with a new read-only token per channel. (Q6)
+- No revenue scope until a channel is monetised. (Q7)
+- Studio-only numbers (impressions, click-through, key moments, Test & Compare) come through
+  the Claude in Chrome extension exporting Studio's CSVs, the user watching the first time per
+  channel; the user can also drop the files in. (Q8)
+- The API's 3-day lag and the 7-day minimum age stand. (Q9)
+
+WHAT COUNTS AS WINNING
+- Three separate scoreboards (shown, clicked, watched), never a blended score; views per day
+  at day 7 is the headline number. (Q10)
+- 300 views before a retention curve counts. (Q11)
+- A hit is at least 2x the median of the 3 uploads either side. (Q12)
+- All viewers, and no breakdown of who they are: no age, gender, country, device or
+  subscriber splits. (Q13: "don't worry about who the viewers are")
+
+WHAT TO MEASURE
+- Everything listed in Q14-Q20 is measured, and more where the data allows. (Q14-Q20:
+  "measure as much as possible. Feel free to add some more stuff")
+
+COMMITTING RULES
+- The user decides every rule. Every candidate is walked through AskUserQuestion (Apply /
+  Apply with changes / Skip / Ask again next run), at most four per batch, strongest first.
+  Be lenient about what is proposed: every tier, including hints. The skill tells the user
+  what it would do and why, then waits. (Q21-Q25)
+- Rules apply to future videos only. No re-cuts, re-uploads, re-titles or thumbnail swaps
+  of existing videos by this skill. (Q26)
+
+REPLICATION, CADENCE, OUTPUT (defaults accepted)
+- After the analysis the skill can propose the next episode as options only. (Q27)
+- Own-channel data feeds the IDEAS.md topic ranking. (Q28)
+- Runs on demand, plus a line in each project's CLAUDE.md to run it when an episode turns 7
+  days old and every two weeks. (Q29)
+- Every pull is a dated snapshot in git. (Q30)
+- WHAT WORKS.txt at the project root plus a retention chart per video. (Q31)
+- Name: winning-video-replicator. (Q32)
+- No messages to other open windows; house-rules.md carries cross-channel rules. (Q33)
+- Thumbnail traits are read by eye and from the specs; Gemini vision only if asked. (Q34)
+- No starting beliefs were given; the first report tests the channel rules already in each
+  CLAUDE.md against the numbers. (Q35)

@@ -1,0 +1,7 @@
+# The skill repo tracks the prompt, the references and the kit, never credentials or pulled data.
+client_secret*.json
+token_*.json
+*.token.json
+__pycache__/
+*.pyc
+scratch/

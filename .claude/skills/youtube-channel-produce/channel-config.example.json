@@ -1,0 +1,17 @@
+{
+  "channelName": "Cosmic Facts",
+  "niche": "space and astronomy",
+  "style": "fast-paced, curiosity-driven, high-retention",
+  "productionMode": "voiceover-broll",
+  "voice": {
+    "provider": "elevenlabs",
+    "voiceId": "YOUR_ELEVENLABS_VOICE_ID",
+    "model": "eleven_multilingual_v2"
+  },
+  "avatar": {
+    "provider": "heygen",
+    "avatarId": "YOUR_HEYGEN_AVATAR_ID"
+  },
+  "playbookPath": "playbook.md",
+  "batchSize": 3
+}
