@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+*.key
+cookies*.txt
+.venv/
+node_modules/
