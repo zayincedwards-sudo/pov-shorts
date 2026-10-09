@@ -1,0 +1,10 @@
+NEEDS - VINTAGE
+===============
+
+ONE THING LEFT FOR THE ANALYSIS
+- A longer clip of the video so I can measure how long the picture loop is. 4 to 5 minutes, any quality (144p or 360p is fine, it stays small). Any stretch of the video works.
+- Drop it in the chat like the last two files.
+
+LATER, BEFORE BUILDING
+- How the picture gets animated (which AI video tool, or me building it frame by frame for free). I will lay out the options with costs.
+- Where the jazz comes from (public-domain 1950s recordings, or generated). I will lay out the options with costs.
