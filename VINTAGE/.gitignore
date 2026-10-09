@@ -1,0 +1,69 @@
+# ---------------------------------------------------------------------------
+# The repo tracks the pipeline, not its output: code, specs, docs, and small
+# assets that are expensive to remake (fonts, sfx, pose libraries, character
+# refs, the reference thumbnail a template is built on).
+# ---------------------------------------------------------------------------
+
+# SECRETS - never commit
+.env
+.env.*
+*.env
+!.env.example
+client_secret*.json
+credentials*.json
+*token*.json
+
+# RENDERED OR DOWNLOADED AUDIO AND VIDEO
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.m4v
+*.mp3
+*.wav
+*.m4a
+# keep the few short sound effects the pipeline needs
+!assets/sfx/*.wav
+!assets/sfx/*.mp3
+
+# BUILD OUTPUT, CACHES, TOOLING
+out/
+cache/
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+*.log
+*.err
+
+# ARCHIVES, INSTALLERS, OS JUNK
+*.zip
+*.7z
+*.rar
+*.exe
+*.msi
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Third-party reference material. The measured analysis (ANALYSIS.md and the
+# small result files at the top of analysis/) is ours and is tracked; other
+# creators' downloads, frames, thumbnails, subtitles and transcripts are not.
+# ---------------------------------------------------------------------------
+analysis/yt/
+analysis/frames/
+analysis/thumbs/
+analysis/subs/
+analysis/transcripts/
+analysis/comments/
+analysis/flop/
+analysis/thumbs_by_views_*.jpg
+# analysis/cuts/, channel_table.*, thumb_stats.json and ANALYSIS.md are our own measurements: tracked
+
+# Render output and sourced stills are rebuilt or re-fetched by the pipeline.
+# footage/*.json records where every clip and still came from, and is tracked.
+episodes/*/render/
+episodes/*/footage/**/*.jpg
+episodes/*/footage/**/*.png
