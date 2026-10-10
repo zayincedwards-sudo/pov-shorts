@@ -40,26 +40,41 @@ def picture(ep, out):
     clips = sorted(glob.glob(os.path.join(ep, 'clips', 'clip_*.mp4')))
     if not clips:
         raise SystemExit('no clips in ' + os.path.join(ep, 'clips'))
-    fps = probe(clips[0], 'stream=r_frame_rate')
-    inputs, chains = [], []
-    for i, c in enumerate(clips):
-        n = int(probe(c, 'stream=nb_frames') or 0) or int(round(float(probe(c, 'format=duration') or 0) * eval(fps)))
-        inputs += ['-i', c]
-        chains.append(f'[{i}:v]trim=end_frame={n - 1},setpts=PTS-STARTPTS,scale=1920:1080:flags=lanczos,setsar=1[v{i}]')
-    graph = ';'.join(chains) + ';' + ''.join(f'[v{i}]' for i in range(len(clips))) + f'concat=n={len(clips)}:v=1:a=0[v]'
+    fps = probe(clips[0], 'stream=r_frame_rate'); r = eval(fps)
+    D = round(8 / r, 4)                                   # crossfade: 8 frames (1/3 s at 24 fps) at every join
+    durs = [float(probe(c, 'format=duration')) for c in clips]
+    # Chain clip1..clipN, then clip1 again, with a crossfade at every join; then cut [D, D + L) so the loop's own end
+    # crossfades into its start too (the wrap-around is just another join).
+    seq = list(range(len(clips))) + [0]
+    inputs = sum((['-i', c] for c in clips), [])
+    chains = [f'[{i}:v]scale=1920:1080:flags=lanczos,setsar=1,fps={fps}' + (',split=2[s0a][s0b]' if i == 0 else f'[s{i}a]') for i in range(len(clips))]
+    labels = [f's{i}a' for i in range(len(clips))] + ['s0b']
+    off, prev, xf = 0.0, labels[0], []
+    for k in range(1, len(seq)):
+        off += durs[seq[k - 1]] - D
+        nxt = f'x{k}'
+        xf.append(f'[{prev}][{labels[k]}]xfade=transition=fade:duration={D}:offset={off:.4f}[{nxt}]')
+        prev = nxt
+    L = sum(durs) - len(clips) * D
+    graph = ';'.join(chains + xf) + f';[{prev}]trim=start={D}:duration={L:.4f},setpts=PTS-STARTPTS[v]'
     run(['ffmpeg', '-v', 'error', '-y', *inputs, '-filter_complex', graph, '-map', '[v]', '-an',
-         '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-g', str(int(round(eval(fps))) * 2),
+         '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-pix_fmt', 'yuv420p', '-g', str(int(round(r)) * 2),
          '-flags', '+cgop', '-movflags', '+faststart', out])
-    # GATE: joins (inside the loop, and loop end -> loop start)
+    # GATE: no frame step at any join (or the wrap) may exceed what the clips do on their own
     F = frames_gray(out); n = len(F)
     step = np.abs(np.diff(F, axis=0)).mean((1, 2))
-    lens = [int(probe(c, 'stream=nb_frames') or 0) - 1 for c in clips]
-    joins = list(np.cumsum(lens)[:-1])
+    joins, t = [], 0.0
+    for k in range(1, len(clips)):
+        t += durs[k - 1] - D
+        joins.append(int(round((t - D) * r)))             # crossfade k starts here in the trimmed loop
+    win = set(j + d for j in joins for d in range(-2, int(round(D * r)) + 3))
+    normal = np.array([s for i, s in enumerate(step) if i not in win])
+    lim = float(np.percentile(normal, 99)) * 1.5 + 0.5
     wrap = float(np.abs(F[-1] - F[0]).mean())
-    lim = float(np.percentile(step, 99)) * 1.5 + 0.5
-    res = dict(frames=n, fps=fps, seconds=round(n / eval(fps), 3), step_p50=round(float(np.median(step)), 3), limit=round(lim, 3),
-               joins=[dict(frame=int(j), diff=round(float(step[j - 1]), 3)) for j in joins], wrap_diff=round(wrap, 3))
-    res['pass'] = all(j['diff'] <= lim for j in res['joins']) and wrap <= lim
+    res = dict(frames=n, fps=fps, seconds=round(n / r, 3), crossfade_s=D, step_p50=round(float(np.median(step)), 3),
+               limit=round(lim, 3), wrap_diff=round(wrap, 3),
+               joins=[dict(frame=j, max_step=round(float(step[max(0, j - 2):j + int(round(D * r)) + 2].max()), 3)) for j in joins])
+    res['pass'] = all(x['max_step'] <= lim for x in res['joins']) and wrap <= lim
     return res
 
 
@@ -87,12 +102,14 @@ def main():
     ap.add_argument('ep'); ap.add_argument('--minutes', type=float, default=265)
     ap.add_argument('--music-dir'); ap.add_argument('--rain', default=os.path.join(os.path.dirname(__file__), '..', 'build', 'rain_354.wav'))
     ap.add_argument('--rain-db', type=float, default=-17.0)
+    ap.add_argument('--deliver-crf', type=int, default=30, help='re-encode the loop for delivery; 30 = about 0.8 Mbps, under the 2 GiB GitHub cap at 4.5 h')
+    ap.add_argument('--abr', default='128k')
     a = ap.parse_args()
     rd = os.path.join(a.ep, 'render'); tmp = os.path.join(rd, 'tmp'); os.makedirs(tmp, exist_ok=True)
     loop = os.path.join(rd, 'loop.mp4')
     j = picture(a.ep, loop)
     json.dump(j, open(os.path.join(rd, 'joins.json'), 'w'), indent=1)
-    print('GATE joins:', 'PASS' if j['pass'] else 'FAIL', json.dumps({k: v for k, v in j.items() if k != 'joins'}), [x['diff'] for x in j['joins']])
+    print('GATE joins:', 'PASS' if j['pass'] else 'FAIL', json.dumps({k: v for k, v in j.items() if k != 'joins'}), [x['max_step'] for x in j['joins']])
     if not j['pass']:
         raise SystemExit('join gate failed: redo the clip on either side of the worst join (veo_clips.py --redo N)')
     secs = a.minutes * 60
@@ -114,8 +131,12 @@ def main():
     bedf = os.path.join(rd, 'bed.m4a')
     run(['ffmpeg', '-v', 'error', '-y', '-i', mix, '-af',
          f"loudnorm=I=-14:TP=-1.5:LRA=7:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,aresample=48000",
-         '-c:a', 'aac', '-b:a', '192k', bedf])
+         '-c:a', 'aac', '-b:a', a.abr, bedf])
     # picture: repeat the encoded loop by stream copy
+    dl = os.path.join(rd, 'loop_deliver.mp4')
+    run(['ffmpeg', '-v', 'error', '-y', '-i', loop, '-c:v', 'libx264', '-preset', 'slow', '-tune', 'animation', '-crf', str(a.deliver_crf),
+         '-pix_fmt', 'yuv420p', '-g', '240', '-flags', '+cgop', '-an', dl])
+    loop = dl
     reps = int(np.ceil(secs / j['seconds'])) + 1
     lst = os.path.join(tmp, 'loop_list.txt')
     open(lst, 'w').write(''.join(f"file '{os.path.abspath(loop)}'\n" for _ in range(reps)))
