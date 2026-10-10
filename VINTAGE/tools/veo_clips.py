@@ -8,7 +8,7 @@ Reads <episode_dir>/scene.json (prompts, model, resolution) and <episode_dir>/st
 a rerun never re-buys a clip unless it is named in --redo. Key: GEMINI_API_KEY from the environment or VINTAGE/.env.
 Cost (quoted 10 Oct 2026): Veo 3.1 Lite 720p USD 0.05 per second, so one 8 s clip is USD 0.40.
 """
-import base64, json, os, sys, time, urllib.request
+import base64, json, os, sys, time, urllib.error, urllib.request
 
 BASE = 'https://generativelanguage.googleapis.com/v1beta'
 PRICE_PER_S = {'720p': 0.05, '1080p': 0.08}
@@ -30,7 +30,10 @@ def key():
 def call(url, k, body=None):
     req = urllib.request.Request(url, data=json.dumps(body).encode() if body else None,
                                  headers={'x-goog-api-key': k, 'Content-Type': 'application/json'})
-    return json.loads(urllib.request.urlopen(req, timeout=120).read())
+    try:
+        return json.loads(urllib.request.urlopen(req, timeout=120).read())
+    except urllib.error.HTTPError as e:
+        sys.exit(f'HTTP {e.code} from {url.split("?")[0]}: {e.read().decode("utf-8", "replace")[:1500]}')
 
 
 def main():
@@ -39,7 +42,7 @@ def main():
     only, redo = opt('--only'), opt('--redo')
     sc = json.load(open(os.path.join(ep, 'scene.json')))
     v = sc['veo']; k = key()
-    img = {'inlineData': {'mimeType': 'image/png', 'data': base64.b64encode(open(os.path.join(ep, 'still.png'), 'rb').read()).decode()}}
+    img = {'bytesBase64Encoded': base64.b64encode(open(os.path.join(ep, 'still.png'), 'rb').read()).decode(), 'mimeType': 'image/png'}
     os.makedirs(os.path.join(ep, 'clips'), exist_ok=True)
     log = open(os.path.join(ep, 'clips', 'spend.log'), 'a')
     for i, p in enumerate(sc['clip_prompts'], 1):
@@ -50,7 +53,7 @@ def main():
             print(f'clip {i}: cached'); continue
         body = {'instances': [{'prompt': p + ' ' + sc['clip_prompt_common'], 'image': img, 'lastFrame': img}],
                 'parameters': {'aspectRatio': v['aspectRatio'], 'resolution': v['resolution'],
-                               'durationSeconds': v['durationSeconds'], 'personGeneration': 'allow_adult'}}
+                               'durationSeconds': int(v['durationSeconds']), 'personGeneration': 'allow_adult'}}
         op = call(f"{BASE}/models/{v['model']}:predictLongRunning", k, body)
         cost = PRICE_PER_S[v['resolution']] * float(v['durationSeconds'])
         log.write(f"{time.strftime('%Y-%m-%d %H:%M:%S')} clip {i} {v['model']} {v['resolution']} {v['durationSeconds']}s est USD {cost:.2f} op {op.get('name')}\n"); log.flush()
