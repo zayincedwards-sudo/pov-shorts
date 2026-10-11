@@ -73,3 +73,7 @@ channel/ref_*
 analysis/cat_motion_sheet.jpg
 analysis/frames_sb_sample.jpg
 analysis/storyboard_tg2_median.png
+
+# episode sources that are paid for and needed to rebuild the video (small: ~32 MB per episode)
+!episodes/*/clips/clip_*.mp4
+!episodes/*/music/*.mp3

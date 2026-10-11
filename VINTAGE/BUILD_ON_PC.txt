@@ -1,0 +1,24 @@
+BUILD EPISODE 001 ON YOUR PC
+============================
+
+WHAT THIS DOES
+- Rebuilds the full 4h25m video from the clips and songs already paid for. No API calls, no cost.
+- Takes about 20-30 minutes. The result is about 5.5 GB, higher quality than the cloud copy.
+
+ONE-TIME SETUP
+- Git Bash (comes with Git for Windows).
+- ffmpeg: open PowerShell and run  winget install Gyan.FFmpeg  then close and reopen Git Bash.
+- Python 3 (the script installs numpy and scipy itself if they are missing).
+
+STEPS
+1. Open Git Bash in the folder where you keep the pov-shorts repo (or clone it: git clone https://github.com/zayincedwards-sudo/pov-shorts).
+2. Run:  git fetch origin vintage-teardown  then  git checkout vintage-teardown  then  git pull
+3. Run:  cd VINTAGE  then  bash build_ep001.sh
+4. When it prints DONE, the video is in VINTAGE/upload/Rainy 1950s Jazz & Cozy Window/ next to thumbnail.jpg and upload info.txt.
+
+UPLOAD
+- Upload the .mp4 to YouTube, set thumbnail.jpg, and paste the title, description and tags from upload info.txt.
+- Tick 'altered or synthetic content' (the picture and music are AI-made).
+
+QUICK TEST FIRST (optional)
+- MINUTES=2 bash build_ep001.sh  makes a 2-minute version in about 2 minutes, to check everything works.
