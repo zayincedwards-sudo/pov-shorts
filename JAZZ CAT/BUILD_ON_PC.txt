@@ -1,0 +1,32 @@
+BUILD EPISODE 001 ON YOUR PC
+============================
+
+WHAT THIS DOES
+- Rebuilds the full 4h25m video from the clips and songs already paid for. No API calls, no cost.
+- The full build should take roughly 20-40 minutes and come out around 5-6 GB (better quality than the cloud copy).
+- The finished video lands at the top of the JAZZ CAT folder, next to thumbnail.jpg, upload info.txt and the branding folder.
+
+ONE-TIME SETUP
+- Git Bash (comes with Git for Windows).
+- ffmpeg: open PowerShell and run  winget install Gyan.FFmpeg  then close and reopen Git Bash.
+- Python 3 (the script installs numpy and scipy itself if they are missing).
+
+STEPS
+1. Open Git Bash in the folder where you keep the pov-shorts repo (or clone it: git clone https://github.com/zayincedwards-sudo/pov-shorts).
+2. Run:  git fetch origin vintage-teardown  then  git checkout vintage-teardown  then  git pull
+3. Run:  cd "JAZZ CAT"  then  bash build_ep001.sh
+4. When it prints DONE, the video is  JAZZ CAT/Rainy 1950s Jazz & Cozy Window.mp4
+
+WHAT IS IN THE JAZZ CAT FOLDER
+- Rainy 1950s Jazz & Cozy Window.mp4  (after the build)
+- thumbnail.jpg
+- upload info.txt  (title, description, tags, settings)
+- branding/  (profile picture, banner, channel setup.txt with name, handle and description)
+
+UPLOAD
+- Set up the channel first from branding/channel setup.txt.
+- Upload the .mp4, set thumbnail.jpg, and paste the title, description and tags from upload info.txt.
+- Tick 'altered or synthetic content' (the picture and music are AI-made).
+
+QUICK TEST FIRST (optional)
+- MINUTES=2 bash build_ep001.sh  makes a 2-minute version to check everything works.

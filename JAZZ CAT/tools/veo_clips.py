@@ -5,7 +5,7 @@ seamless loop (the method inferred from the reference, ANALYSIS.md).
 
 Reads <episode_dir>/scene.json (prompts, model, resolution) and <episode_dir>/still.png. Writes
 <episode_dir>/clips/clip_NN.mp4 and a log line per call to <episode_dir>/clips/spend.log. Finished clips are cached:
-a rerun never re-buys a clip unless it is named in --redo. Key: GEMINI_API_KEY from the environment or VINTAGE/.env.
+a rerun never re-buys a clip unless it is named in --redo. Key: GEMINI_API_KEY from the environment or JAZZ CAT/.env.
 Cost (quoted 10 Oct 2026): Veo 3.1 Lite 720p USD 0.05 per second, so one 8 s clip is USD 0.40.
 """
 import base64, json, os, sys, time, urllib.error, urllib.request
@@ -23,7 +23,7 @@ def key():
                 if line.startswith('GEMINI_API_KEY=') and line.strip() != 'GEMINI_API_KEY=':
                     k = line.split('=', 1)[1].strip()
     if not k:
-        sys.exit('No GEMINI_API_KEY in the environment or VINTAGE/.env')
+        sys.exit('No GEMINI_API_KEY in the environment or JAZZ CAT/.env')
     return k
 
 

@@ -1,0 +1,29 @@
+CHANNEL SETUP - JAZZ CAT
+========================
+
+CHANNEL NAME
+Jazz Cat
+
+HANDLE (try in this order; YouTube says which are free)
+- @JazzCatAmbience
+- @JazzCatRain
+- @TheJazzCatWindow
+
+PROFILE PICTURE
+- branding/profile_picture_800.png (800x800; YouTube shows it as a circle, the cat stays centred).
+
+BANNER
+- branding/banner_2560x1440.png (upload this one).
+- branding/banner_safe_area_preview.png shows the strip every device displays: the cat, the rain and the candle jar.
+
+CHANNEL DESCRIPTION (paste as is)
+Welcome to Jazz Cat, a quiet window seat for rainy days. Every video is one cozy vintage scene: rain running down old window glass, candles glowing on the sill, a warm cup of coffee and a black cat watching the world outside, while soft 1950s-style jazz drifts in from another room.
+
+Put one on for sleep, study, reading, work or simply slowing down. Long, calm, ad-light ambience made to feel like home.
+
+KEYWORDS (Studio > Settings > Channel > Keywords)
+vintage jazz, rain ambience, cozy window, jazz cat, black cat, rainy day jazz, relaxing jazz, study music, sleep music, coffee jazz, 1950s jazz, oldies ambience
+
+NOTES
+- Branding is cut from our own episode-001 artwork, so the channel, the thumbnail and the video all match (the reference channel does the same with its banner).
+- Before uploading, check YouTube Studio is on the Jazz Cat channel, not one of your other channels.

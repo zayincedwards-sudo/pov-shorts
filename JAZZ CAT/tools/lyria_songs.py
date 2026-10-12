@@ -21,7 +21,7 @@ def key():
             if line.startswith('GEMINI_API_KEY=') and line.strip() != 'GEMINI_API_KEY=':
                 k = line.split('=', 1)[1].strip()
     if not k:
-        sys.exit('No GEMINI_API_KEY in the environment or VINTAGE/.env')
+        sys.exit('No GEMINI_API_KEY in the environment or JAZZ CAT/.env')
     return k
 
 

@@ -69,7 +69,7 @@ episodes/*/footage/**/*.jpg
 episodes/*/footage/**/*.png
 
 # other creators' channel art and frames/sheets cut from their video
-channel/ref_*
+analysis/reference_channel/
 analysis/cat_motion_sheet.jpg
 analysis/frames_sb_sample.jpg
 analysis/storyboard_tg2_median.png

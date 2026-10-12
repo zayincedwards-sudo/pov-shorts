@@ -1,4 +1,4 @@
-# VINTAGE: 4.5-hour rainy-window jazz ambience (reference: Vintage Ambience Cafe, youtu.be/tg2cNKIuCuo)
+# JAZZ CAT: 4.5-hour rainy-window jazz ambience (reference: Vintage Ambience Cafe, youtu.be/tg2cNKIuCuo)
 
 Project root is this folder. Evidence for every rule is in `ANALYSIS.md` and `analysis/`. Scope set by the user on
 9 Oct 2026: replicate ONLY the reference's rainy-window video and close variations of it, plus the channel identity.
@@ -32,6 +32,10 @@ session (credit spend, git, Notepad docs). Anything below that differs is a user
 - **Delivery:** loop re-encoded at CRF 30 (~0.8 Mbps; YouTube serves the reference at ~0.75 Mbps) with 128k AAC, so
   4.5 h is ~1.77 GB and fits a GitHub release. Thumbnail = the graded still, no text. Title pattern
   `{Weather} {Era} Jazz & Cozy {Place} | {Subject}, {Prop} & Relaxing Ambience`.
+- **Folder layout (user, 12 Oct 2026: "put it in a folder called JAZZ CAT. put all the branding and upload info in as
+  well"):** the project is `JAZZ CAT/`; the finished video, `thumbnail.jpg`, `upload info.txt` and `branding/`
+  (profile picture, banner, `channel setup.txt`) sit at its top. Branding is cut free from our own still
+  (`tools/banner.py`); the reference channel's art lives only in `analysis/reference_channel/` (gitignored).
 - **Spending per episode (measured 10 Oct 2026):** USD 2.51 = still 0.03 + 5 clips 2.00 + 6 songs 0.48.
 
 ## Build
@@ -43,13 +47,15 @@ python tools/veo_clips.py episodes/<ep>            # paid, cached; --redo N to r
 python tools/lyria_songs.py episodes/<ep>          # paid, cached
 python tools/assemble.py episodes/<ep> --minutes 265
 ```
-Key: `GEMINI_API_KEY` in `VINTAGE/.env` (gitignored) or the environment.
+Key: `GEMINI_API_KEY` in `JAZZ CAT/.env` (gitignored) or the environment.
 
 ## Episode order
 - 001 Rainy 1950s Jazz & Cozy Window (10 Oct 2026): 4h25m, 38.3 s picture loop, 16:42 music bed, USD 2.51.
-  Delivered as a draft GitHub release `vintage-ep001`.
+  Delivered as source (clips + songs on the branch) plus `build_ep001.sh`, which renders it on the user's PC.
 
 ## Build lessons
+- 11 Oct 2026: a cloud session may not create GitHub releases (HTTP 403) and the app caps sent files at 500 MB,
+  so a 4.5 h video can't leave the cloud. Commit the paid sources (~32 MB) and let `build_ep001.sh` render locally.
 - 10 Oct 2026: Veo's `predictLongRunning` rejects `inlineData` images (the docs example is wrong for it); it wants
   `{"bytesBase64Encoded", "mimeType"}`, and `durationSeconds` must be a number. Both 400s are not billed.
   `veo_clips.py` now sends the working form and prints the API's error body.

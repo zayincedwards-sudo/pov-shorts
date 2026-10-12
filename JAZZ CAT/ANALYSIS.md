@@ -1,4 +1,4 @@
-# VINTAGE: teardown of one video (reference: Vintage Ambience Cafe)
+# JAZZ CAT: teardown of one video (reference: Vintage Ambience Cafe)
 
 Scope (user, 9 Oct 2026): replicate ONLY "Rainy 1950s Jazz & Cozy Window | Cat, Candles & Relaxing Ambience"
 (youtu.be/tg2cNKIuCuo) and very close variations of it, plus the channel's identity. The channel's other nine
@@ -8,7 +8,7 @@ Data actually measured (cloud IP is bot-walled; the user supplied the media):
 - `analysis/yt/tg2_1080_30s.mp4`: 30 s of the video at 1920x1074, 30 fps (user upload)
 - `analysis/yt/tg2_audio_32min.m4a`: the first 32 min 10 s of the soundtrack, AAC 128k (user upload)
 - 1,593 storyboard frames covering the full 4:25:16 (321x180, one every 9.99 s), info JSON, heatmap, thumbnail
-- the channel's About page, avatar and banner (`channel/`)
+- the channel's About page, avatar and banner (`analysis/reference_channel/`)
 
 ## 1. Channel snapshot (9 Oct 2026)
 - Joined **16 May 2026, the same day this video went up: it was the channel's first upload.**
@@ -94,7 +94,7 @@ The opening segment is 1.0, everything after is flat at 0.24-0.34 (median 0.24).
 - Tags: seven hashtag strings (#vintagejazz #rainyambience #cozywindow, #relaxingmusic, #candlelight, #oldies
   #studymusic, #chilljazz, #coffeejazz, #oldvinyl).
 
-## 5. Channel identity (`channel/`)
+## 5. Channel identity (`analysis/reference_channel/`)
 - Name "Vintage Ambience Cafe", handle @VintageAmbienceCafe.
 - Avatar (`ref_avatar.jpg`): a flat retro screen-print poster in a different style from the videos. A cat from
   behind on a sill at an arched rainy window, a vinyl record filling the arch, a lit candle, steam curling up into
@@ -130,4 +130,4 @@ The opening segment is 1.0, everything after is flat at 0.24-0.34 (median 0.24).
 ## 8. Evidence index
 `analysis/storyboard_tg2.json` (+ `_motion.png`, `_median.png`), `analysis/motion_1080_30s.png`,
 `analysis/cat_motion_sheet.jpg`, `analysis/audio_bed_tg2.json`, `analysis/spectrogram_loop1.png`,
-`analysis/channel_table.csv`, `analysis/thumb_stats.json`, `channel/`. Tools: `analysis/tools/`.
+`analysis/channel_table.csv`, `analysis/thumb_stats.json`, `analysis/reference_channel/`. Tools: `analysis/tools/`.
